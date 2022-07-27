@@ -23,7 +23,7 @@ class HashidConverter(BaseConverter):
     Hashid Converter.
 
     Converts given hashids from routes to integers.
-    Example: @bq.route('/users/<hashid:user_id')
+    Example: @bp.route('/users/<hashid:user_id')
 
     Converts integers to hashids when generating urls.
     Example: url_for('users.user', user_id=user.id)
