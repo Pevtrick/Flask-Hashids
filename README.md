@@ -21,75 +21,79 @@ Flask-Hashids is configured through the standard Flask config API. These are the
 ## Examples
 
 ```python
-from flask import abort, Flask, url_for, jsonify, request
+from flask import abort, Flask, jsonify, url_for, request
 from flask_hashids import HashidMixin, Hashids
 from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
+
 # The SECRET_KEY is used as a salt, so don't forget to set this in production
-app.config['SECRET_KEY'] = 'secret!'
+app.config["SECRET_KEY"] = "secret!"
+
 # Database connection string
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
+
 db = SQLAlchemy(app)
 hashids = Hashids(app)
 
 
 class User(HashidMixin, db.Model):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
 
 
-@app.route('/users/', methods=["POST"])
+@app.route("/users/", methods=["POST"])
 def create_user():
     user = User(**request.json)
     db.session.add(user)
     db.session.commit()
-    return 'CREATED', 201
+    return "CREATED", 201
 
 
-@app.route('/users/')
+@app.route("/users/")
 def get_users():
     users = [
-      {
-        'id': user.hashid,  # hashid property from HashidMixin
-        'name': user.name,
-        'url': url_for('get_user', user_id=user.id)  # Int id for url generation
-      } for user in User.query.all()
+        {
+            "id": user.hashid,  # hashid property from HashidMixin
+            "name": user.name,
+            "url": url_for("get_user", user_id=user.id),  # Int id for url generation
+        }
+        for user in User.query.all()
     ]
     return jsonify(users)
 
 
-@app.route('/users/<hashid:user_id>')
+@app.route("/users/<hashid:user_id>")
 def get_user(user_id):
     # The HashidConverter decodes the given hashid to an int
     user = User.query.get_or_404(user_id)
     return jsonify(
-      {
-        'id': user.hashid,
-        'name':user.name,
-        'url': url_for('get_user', user_id=user.id)
-      }
+        {
+            "id": user.hashid,
+            "name": user.name,
+            "url": url_for("get_user", user_id=user.id),
+        }
     )
 
 
-@app.route('/users/<hashid:user_id>', methods=["PUT"])
+@app.route("/users/<hashid:user_id>", methods=["PUT"])
 def update_user(user_id):
     user = User.query.get_or_404(user_id)
-    user.name = request.json.get("name",user.name)
+    user.name = request.json.get("name", user.name)
     db.session.add(user)
     db.session.commit()
-    return 'OK', 200
+    return "OK", 200
 
 
-@app.route('/users/<hashid:user_id>', methods=["DELETE"])
+@app.route("/users/<hashid:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
     db.session.commit()
-    return 'OK', 200
+    return "OK", 200
 
 
 @app.before_first_request
@@ -97,7 +101,7 @@ def create_tables():
     db.create_all()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
 ```
 
