@@ -6,6 +6,7 @@ A simple CRUD application demonstrating how to use the Flask-Hashids extension.
 
 - Setup a virtual environment within the basic_crud directory: `python3 -m venv venv`
 - Activate the newly created virtual environment: `source venv/bin/activate`
+- Install requirements: `pip install -r requirements.txt`
 - Start the app: `python app.py`
 
 ## Usage

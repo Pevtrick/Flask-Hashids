@@ -5,7 +5,6 @@ from werkzeug.exceptions import HTTPException
 
 
 app = Flask(__name__)
-# The SECRET_KEY is used as a salt, so don't forget to set this in production
 app.config['SECRET_KEY'] = 'secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
 db = SQLAlchemy(app)
@@ -20,15 +19,10 @@ class User(HashidMixin, db.Model):
 
     @property
     def url(self):
-        # The HashidConverter encodes the given id to a hashid string
         return url_for('read_user', user_id=self.id)
 
     def to_json(self):
-        return {
-            'id': self.hashid,
-            'name': self.name,
-            'url': self.url
-        }
+        return {'id': self.hashid, 'name': self.name, 'url': self.url}
 
 
 @app.before_first_request
@@ -57,7 +51,6 @@ def read_users():
 
 @app.route('/users/<hashid:user_id>')
 def read_user(user_id):
-    # The HashidConverter decodes the given hashid to an int
     print(user_id)
     user = User.query.get_or_404(user_id)
     return user.to_json(), 200
@@ -65,7 +58,6 @@ def read_user(user_id):
 
 @app.route('/users/<hashid:user_id>', methods=['PUT'])
 def update_user(user_id):
-    # The HashidConverter decodes the given hashid to an int
     user = User.query.get_or_404(user_id)
     user.name = request.json.get('name', user.name)
     db.session.commit()
@@ -74,7 +66,6 @@ def update_user(user_id):
 
 @app.route('/users/<hashid:user_id>', methods=['DELETE'])
 def delete_user(user_id):
-    # The HashidConverter decodes the given hashid to an int
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
     db.session.commit()
