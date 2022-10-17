@@ -20,169 +20,27 @@ Flask-Hashids is configured through the standard Flask config API. These are the
 
 ## Examples
 
+You can find detailed examples on how to use Flask-Hashids in the examples directory.
+
+### HashidConverter
+
 ```python
-from flask import abort, Flask, jsonify, url_for, request
-from flask_hashids import HashidMixin, Hashids
-from flask_sqlalchemy import SQLAlchemy
-
-
-app = Flask(__name__)
-
-# The SECRET_KEY is used as a salt, so don't forget to set this in production
-app.config["SECRET_KEY"] = "secret!"
-
-# Database connection string
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
-
-db = SQLAlchemy(app)
-hashids = Hashids(app)
-
-
-class User(HashidMixin, db.Model):
-    __tablename__ = "user"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-
-
-@app.route("/users/", methods=["POST"])
-def create_user():
-    user = User(**request.json)
-    db.session.add(user)
-    db.session.commit()
-    return "CREATED", 201
-
-
-@app.route("/users/")
-def get_users():
-    users = [
-        {
-            "id": user.hashid,  # hashid property from HashidMixin
-            "name": user.name,
-            "url": url_for("get_user", user_id=user.id),  # Int id for url generation
-        }
-        for user in User.query.all()
-    ]
-    return jsonify(users)
-
-
-@app.route("/users/<hashid:user_id>")
-def get_user(user_id):
+@app.route('/ressources/<hashid:ressource_id')
+def get_ressource(ressource_id: int):
     # The HashidConverter decodes the given hashid to an int
-    user = User.query.get_or_404(user_id)
-    return jsonify(
-        {
-            "id": user.hashid,
-            "name": user.name,
-            "url": url_for("get_user", user_id=user.id),
-        }
-    )
-
-
-@app.route("/users/<hashid:user_id>", methods=["PUT"])
-def update_user(user_id):
-    user = User.query.get_or_404(user_id)
-    user.name = request.json.get("name", user.name)
-    db.session.add(user)
-    db.session.commit()
-    return "OK", 200
-
-
-@app.route("/users/<hashid:user_id>", methods=["DELETE"])
-def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    return "OK", 200
-
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
-
-if __name__ == "__main__":
-    app.run()
+    print(isinstance(ressource_id, int))  # True
+    # The HashidConverter encodes the given id to a hashid in the URL
+    url_for('get_ressource', ressource_id=123)  # '/ressources/Mj3'
 ```
 
-### Running the example app
+### Manual usage
 
-Start your app with `flask run` and test out the `curl` commands below to see examples on how the hashid works for various CRUD operations.
-
-#### Create a user
-
-```sh
-curl \
-  -H 'Content-Type: application/json' \
-  -X POST \
-  -d '{"name": "John Doe"}' \
-  localhost:5000/users/
+```python
+def some_function(ressource_id: int):
+    hashid = current_app.extensions['hashids'].encode(123)  # 'Mj3'
+    decoded_id = current_app.extensions['hashids'].decode(hashid)  # 123
 ```
 
-```sh
-201 CREATED
-```
-
-#### Get all users
-
-```sh
-curl \
-  -H 'Content-Type: application/json' \
-  localhost:5000/users/
-```
-
-```json
-[
-  {
-    "id":"G8",
-    "name":"John",
-    "url":"/users/G8"
-  }
-]
-```
-
-#### Get a single user
-
-```sh
-curl \
-  -H 'Content-Type: application/json' \
-  localhost:5000/users/G8
-```
-
-```json
-{
-  "id":"G8",
-  "name":"John",
-  "url":"/users/G8"
-}
-```
-
-#### Update a user
-
-```sh
-curl \
-  -H 'Content-Type: application/json' \
-  -X PUT \
-  -d '{"name": "Jane Doe"}' \
-  localhost:5000/users/G8
-```
-
-```sh
-200 OK
-```
-
-#### Delete a user
-
-```sh
-curl \
-  -H 'Content-Type: application/json' \
-  -X DELETE \
-  localhost:5000/users/G8
-```
-
-```sh
-200 OK
-```
 
 ## Resources
 
