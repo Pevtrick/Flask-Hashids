@@ -25,19 +25,19 @@ You can find detailed examples on how to use Flask-Hashids in the examples direc
 ### HashidConverter
 
 ```python
-@app.route('/ressources/<hashid:ressource_id')
-def get_ressource(ressource_id: int):
+@app.route('/resources/<hashid:resource_id')
+def get_resource(resource_id: int):
     # The HashidConverter decodes the given hashid to an int
-    print(isinstance(ressource_id, int))  # True
+    print(isinstance(resource_id, int))  # True
     # The HashidConverter encodes the given id to a hashid in the URL
-    url_for('get_ressource', ressource_id=123)  # '/ressources/Mj3'
+    url_for('get_resource', resource_id=resource_id)  # '/resources/Mj3'
 ```
 
 ### Manual usage
 
 ```python
-def some_function(ressource_id: int):
-    hashid = current_app.extensions['hashids'].encode(123)  # 'Mj3'
+def some_function(resource_id: int):
+    hashid = current_app.extensions['hashids'].encode(resource_id)  # 'Mj3'
     decoded_id = current_app.extensions['hashids'].decode(hashid)  # 123
 ```
 

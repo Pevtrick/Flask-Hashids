@@ -24,13 +24,13 @@ class HashidConverter(BaseConverter):
 
     Converts given hashids from routes to integers.
     Example:
-        @app.route('/ressources/<hashid:ressource_id')
-        def get_ressource(ressource_id: int):
-            print(isinstance(ressource_id, int))  # True
+        @app.route('/resources/<hashid:resource_id')
+        def get_resource(resource_id: int):
+            print(isinstance(resource_id, int))  # True
 
     Converts integers to hashids when generating urls.
     Example:
-        url_for('get_ressource', ressource_id=123)  # /ressources/Mj3
+        url_for('get_resource', resource_id=123)  # /resources/Mj3
     '''
 
     def to_python(self, value: str) -> int:
