@@ -6,12 +6,15 @@ from werkzeug.routing import BaseConverter
 
 class HashidMixin:
     '''
-    Hashid mixin meant for use with SQLAlchemy models.
-    Adds a property to the model which returns a hashid based on the model id.
-
+    Thx HashidMixin class adds a hashid property to a class instance. This
+    property will compute a hashid based on the attribute specified by a
+    special class variable called __id_attribute__ (defaults to "id").
+    
+    The class can be used with SQLAlchemy models.
     This won't add a column to the model, the hashid is computed on runtime.
 
-    Note: The extended class must have an attribute 'id' of type int!
+    NOTE: The extended class must have an attribute named after the value of
+    __id_attribute__ and must be of type int!
     '''
 
     __id_attribute__ = 'id'
