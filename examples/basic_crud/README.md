@@ -1,4 +1,4 @@
-# Basic CRUD example app
+# Basic CRUD example application
 
 A simple CRUD application demonstrating how to use the Flask-Hashids extension.
 
