@@ -13,9 +13,13 @@ class HashidMixin:
 
     Note: The extended class must have an attribute 'id' of type int!
     '''
+
+    __id_attribute__ = 'id'
+
     @property
     def hashid(self) -> str:
-        return current_app.extensions['hashids'].encode(self.id)
+        id = getattr(self, self.__class__.__id_attribute__)
+        return current_app.extensions['hashids'].encode(id)
 
 
 class HashidConverter(BaseConverter):
