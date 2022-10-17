@@ -23,7 +23,7 @@ Flask-Hashids is configured through the standard Flask config API. These are the
 You can find more detailed examples on how to use Flask-Hashids in the examples directory.
 
 ```python
-from flask import Flask, jsonify, request, url_for
+from flask import Flask, jsonify, url_for
 from flask_hashids import HashidMixin, Hashids
 from flask_sqlalchemy import SQLAlchemy
 
