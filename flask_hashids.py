@@ -1,4 +1,4 @@
-from flask import current_app, Flask
+from flask import abort, current_app, Flask
 from hashids import Hashids as _Hashids
 from typing import Any, Dict
 from werkzeug.routing import BaseConverter
@@ -14,7 +14,7 @@ class HashidMixin:
     Note: The extended class must have an attribute 'id' of type int!
     '''
     @property
-    def hashid(self):
+    def hashid(self) -> str:
         return current_app.extensions['hashids'].encode(self.id)
 
 
@@ -23,14 +23,22 @@ class HashidConverter(BaseConverter):
     Hashid Converter.
 
     Converts given hashids from routes to integers.
-    Example: @bp.route('/users/<hashid:user_id')
+    Example:
+        @bp.route('/users/<hashid:user_id')
+        def my_route(user_id: int):
+            print(isinstance(user_id, int))  # True
 
     Converts integers to hashids when generating urls.
-    Example: url_for('users.user', user_id=user.id)
+    Example:
+        url_for('users.user', user_id=123)  # /users/Mj3
     '''
 
     def to_python(self, value: str) -> int:
-        return current_app.extensions['hashids'].decode(value)
+        try:
+            decoded_value = current_app.extensions['hashids'].decode(value)
+        except IndexError:
+            abort(404)
+        return decoded_value
 
     def to_url(self, value: int) -> str:
         return current_app.extensions['hashids'].encode(value)
