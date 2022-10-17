@@ -20,50 +20,28 @@ Flask-Hashids is configured through the standard Flask config API. These are the
 
 ## Examples
 
+You can find detailed examples on how to use Flask-Hashids in the examples directory.
+
+### HashidConverter
+
 ```python
-from flask import abort, Flask, render_template, url_for
-from flask_hashids import HashidMixin, Hashids
-from flask_sqlalchemy import SQLAlchemy
-
-
-app = Flask(__name__)
-# The SECRET_KEY is used as a salt, so don't forget to set this in production
-app.config['SECRET_KEY'] = 'secret!'
-db = SQLAlchemy(app)
-hashids = Hashids(app)
-
-
-class User(HashidMixin, db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-
-
-@app.route('/users')
-def users():
-    hashid_users = [
-      {
-        'id': user.hashid,  # hashid property from HashidMixin
-        'name': user.name,
-        'url': url_for('user', user_id=user.id)  # Int id for url generation
-      } for user in User.query.all()
-    ]
-    return render_template('users.html', users=hashid_users)
-
-
-@app.route('/users/<hashid:user_id>')
-def user(user_id):
+@app.route('/resources/<hashid:resource_id')
+def get_resource(resource_id: int):
     # The HashidConverter decodes the given hashid to an int
-    user = User.query.get_or_404(user_id):
-    return render_template('user.html', user=user)
+    print(isinstance(resource_id, int))  # True
+    # The HashidConverter encodes the given id to a hashid in the URL
+    url_for('get_resource', resource_id=resource_id)  # '/resources/Mj3'
+```
 
+### Manual usage
 
-if __name__ == '__main__':
-    app.run()
+```python
+def some_function(resource_id: int):
+    hashid = current_app.extensions['hashids'].encode(resource_id)  # 'Mj3'
+    decoded_id = current_app.extensions['hashids'].decode(hashid)  # 123
 ```
 
 
-## Ressources
+## Resources
 
 - https://hashids.org/python/
