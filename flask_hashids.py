@@ -2,7 +2,6 @@ from flask import abort, current_app, Flask
 from hashids import Hashids as _Hashids
 from typing import Any, Dict
 from werkzeug.routing import BaseConverter
-from hashlib import sha256
 
 
 class HashidMixin:
