@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = 'top_secret_key'
+app.config['HASHIDS_SALT'] = 'secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
 db = SQLAlchemy(app)
 hashids = Hashids(app)

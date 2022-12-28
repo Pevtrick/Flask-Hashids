@@ -2,6 +2,7 @@ from flask import abort, current_app, Flask
 from hashids import Hashids as _Hashids
 from typing import Any, Dict
 from werkzeug.routing import BaseConverter
+from hashlib import sha256
 
 
 class HashidMixin:
@@ -67,8 +68,8 @@ class Hashids:
         if 'HASHIDS_MIN_LENGTH' in app.config:
             hashids_config['min_length'] = \
                 int(app.config['HASHIDS_MIN_LENGTH'])
-        if 'SECRET_KEY' in app.config:
-            hashids_config['salt'] = app.config['SECRET_KEY']
+        if 'HASHIDS_SALT' in app.config:
+            hashids_config['salt'] = app.config['HASHIDS_SALT']
         self._hashids = _Hashids(**hashids_config)
         if not hasattr(app, 'extensions'):
             app.extensions = {}
