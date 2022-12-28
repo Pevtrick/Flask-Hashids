@@ -16,7 +16,7 @@ Flask-Hashids is configured through the standard Flask config API. These are the
 
 - **HASHIDS_ALPHABET**: Read more about that in [Hashids documentation](https://github.com/davidaurelio/hashids-python#using-a-custom-alphabet)
 - **HASHIDS_MIN_LENGTH**: Read more about that in [Hashids documentation](https://github.com/davidaurelio/hashids-python#controlling-hash-length)
-- **SECRET_KEY**: Used as the salt, read more in [Hashids documentation](https://github.com/davidaurelio/hashids-python#using-a-custom-salt)
+- **HASHIDS_SALT**: It is strongly recommended that this is NEVER the same as the `SECRET_KEY`. Read more about this option in [Hashids documentation](https://github.com/davidaurelio/hashids-python#using-a-custom-salt)
 
 ## Examples
 
