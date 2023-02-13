@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='Flask-Hashids',
-    version='1.0.0',
+    version='1.0.1',
     url='https://github.com/Pevtrick/Flask-Hashids',
     author='Patrick Jentsch',
     author_email='patrickjentsch@gmx.net',
@@ -18,6 +18,7 @@ setup(
     install_requires=['Flask', 'Hashids >= 1.0.2'],
     classifiers=[
         'Programming Language :: Python :: 3',
+        'Framework :: Flask',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
