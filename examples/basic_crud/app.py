@@ -22,7 +22,7 @@ class User(HashidMixin, db.Model):
     def url(self):
         return url_for('read_user', user_id=self.id)
 
-    def to_json(self):
+    def to_json_serializeable(self):
         return {'id': self.hashid, 'name': self.name, 'url': self.url}
 
 
@@ -41,20 +41,19 @@ def create_user():
     user = User(name=request.json['name'])
     db.session.add(user)
     db.session.commit()
-    return user.to_json(), 201
+    return user.to_json_serializeable(), 201
 
 
 @app.route('/users')
 def read_users():
-    users = [u.to_json() for u in User.query.all()]
+    users = [u.to_json_serializeable() for u in User.query.all()]
     return users, 200
 
 
 @app.route('/users/<hashid:user_id>')
 def read_user(user_id):
-    print(user_id)
     user = User.query.get_or_404(user_id)
-    return user.to_json(), 200
+    return user.to_json_serializeable(), 200
 
 
 @app.route('/users/<hashid:user_id>', methods=['PUT'])

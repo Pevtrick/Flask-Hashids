@@ -21,7 +21,7 @@ class User(HashidMixin, db.Model):
     def url(self):
         return url_for('user', user_id=self.id)
 
-    def to_json(self):
+    def to_json_serializeable(self):
         return {'id': self.hashid, 'name': self.name, 'url': self.url}
 
 
@@ -37,7 +37,7 @@ def database_setup():
 
 @app.route('/users')
 def users():
-    return [user.to_json() for user in User.query.all()], 200
+    return [user.to_json_serializeable() for user in User.query.all()], 200
 
 
 @app.route('/users/<hashid:user_id>')
@@ -45,7 +45,7 @@ def user(user_id: int):
     user = User.query.get(user_id)
     if user is None:
         return jsonify('User not found'), 404
-    return user.to_json(), 200
+    return user.to_json_serializeable(), 200
 
 
 def main():
