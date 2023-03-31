@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     py_modules=['flask_hashids'],
-    install_requires=['Flask', 'Hashids >= 1.0.2'],
+    install_requires=['Flask >= 0.7', 'Hashids >= 1.0.2'],
     classifiers=[
         'Programming Language :: Python :: 3',
         'Framework :: Flask',
