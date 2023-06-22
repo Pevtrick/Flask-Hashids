@@ -10,7 +10,7 @@ SimplifiedDecodedHashid = Union[int, Tuple[int, ...], Tuple[()]]
 
 class HashidMixin:
     '''
-    Thx HashidMixin class adds a hashid property to a class instance. This
+    The HashidMixin class adds a hashid property to a class instance. This
     property will compute a hashid based on the attribute specified by a
     special class variable called __id_attribute__ (defaults to "id").
     
