@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='Flask-Hashids',
-    version='1.0.1',
+    version='1.0.2',
     url='https://github.com/Pevtrick/Flask-Hashids',
     author='Patrick Jentsch',
     author_email='patrickjentsch@gmx.net',
